@@ -28,11 +28,18 @@ namespace Empleados.Forms
             objconexion = new Clases.Conexion();
             Conexion = new SqlConnection(objconexion.Conn());
             this.CancelButton = btnCancelar;
-            cmd.Connection = Conexion;
-            cmd.CommandText = "SELECT e.Clave_Emp, e.Nombre,e.ApPaterno,e.ApMaterno,e.FecNac,d.Puesto as Departamento,e.sueldo FROM Empleados e INNER JOIN Departamentos d ON e.Departamento = d.Puesto ";//sirve para buscar lo que contenga la expresion em id o nombre
-            da.SelectCommand = cmd;
-            dgBusqueda.DataSource = dt;
+            //cmd.Connection = Conexion;
+            //cmd.CommandText = "SELECT e.Clave_Emp, e.Nombre,e.ApPaterno,e.ApMaterno,e.FecNac,d.Puesto as Departamento,e.sueldo,e.estatus FROM Empleados e INNER JOIN Departamentos d ON e.Departamento = d.Puesto WHERE  e.estatus=1 ";//sirve para buscar lo que contenga la expresion em id o nombre
+            //da.SelectCommand = cmd;
+            //dgBusqueda.DataSource = dt;
             llenarcboxDepa();
+            //DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
+            //dgBusqueda.Columns.Add(btn);
+            //btn.HeaderText = "Click Data";
+            //btn.Text = "Modificar";
+            //btn.Name = "btn";
+            //btn.UseColumnTextForButtonValue = true;
+            buscar("");
 
         }
 
@@ -60,7 +67,7 @@ namespace Empleados.Forms
             Conexion.Close();
 
         }
-      
+     
 
 
         private void txtExpresion_KeyPress(object sender, KeyPressEventArgs e)
@@ -70,7 +77,8 @@ namespace Empleados.Forms
                 buscar(txtExpresion.Text);
             }
         }
-        
+        public DataGridViewButtonColumn GB = new DataGridViewButtonColumn();
+
         public void buscar(string expresion)
         {
             try
@@ -81,17 +89,26 @@ namespace Empleados.Forms
                 cmd.Connection = Conexion;
                 cmd.Parameters.Clear();
 
-                if (!string.IsNullOrEmpty(expresion))//se pone el ! para que devuelva falso y no true
+                if (!string.IsNullOrEmpty(expresion))
                 {
 
-                    //cmd.CommandText = "SELECT e.Clave_Emp,e.Nombre,e.ApPaterno,e.ApMaterno,e.FecNac,d.Descripcion,e.sueldo FROM Empleados e INNER JOIN Departamentos d ON  e.Departamento = d.Puesto  WHERE e.Clave_Emp  LIKE '%' + '" + @expresion + "' + '%' OR e.Nombre LIKE '%' + '" + @expresion + "' + '%' e.ApPaterno LIKE '%' + '" + @expresion + "' + '%' OR e.ApMaterno LIKE '%' + '" + @expresion + "' + '%' e.FecNac LIKE '%' + '" + @expresion + "' + '%' OR d.Descripcion LIKE '%' + '" + @expresion + "' + '%' e.Sueldo LIKE '%' + '" + @expresion + "' + '%'"; //sirve para buscar lo que contenga la expresion em id o nombre
 
-                    cmd.CommandText = " SELECT e.Clave_Emp, e.Nombre,e.ApPaterno,e.ApMaterno,e.FecNac,d.Descripcion,e.sueldo FROM Empleados e INNER JOIN Departamentos d ON e.Departamento = d.Puesto  WHERE e.Clave_Emp LIKE '%' + '" + @expresion + "' + '%' OR e.Nombre LIKE '%' + '" + @expresion + "' + '%'  OR e.ApPaterno LIKE '%' + '" + @expresion + "' + '%' OR e.ApMaterno LIKE '%' +  '" + @expresion + "' + '%' OR e.FecNac LIKE '%' + '" + @expresion + "' + '%' OR d.Descripcion LIKE '%' + '" + @expresion + "' + '%' OR e.Sueldo LIKE '%' + '" + @expresion + "' + '%''%'";//sirve para buscar lo que contenga la expresion em id o nombre
+                    cmd.CommandText = " SELECT e.Clave_Emp,CONCAT(e.Nombre,' ',e.ApPaterno,' ',e.ApMaterno) as nombre_completo, e.Nombre,e.ApPaterno,e.ApMaterno,e.FecNac,d.Descripcion,e.sueldo,e.estatus FROM Empleados e INNER JOIN Departamentos d ON e.Departamento = d.Puesto  WHERE e.estatus=1 AND  (e.Clave_Emp LIKE '%' + '" + @expresion + "' + '%' OR e.Nombre LIKE '%' + '" + @expresion + "' + '%'  OR e.ApPaterno LIKE '%' + '" + @expresion + "' + '%' OR e.ApMaterno LIKE '%' +  '" + @expresion + "' + '%' OR e.FecNac LIKE '%' + '" + @expresion + "' + '%' OR d.Descripcion LIKE '%' + '" + @expresion + "' + '%' OR e.Sueldo LIKE '%' + '" + @expresion + "' + '%' OR e.estatus LIKE '%' + '" + @expresion + "' + '%')";//sirve para buscar lo que contenga la expresion em id o nombre
                     cmd.Parameters.AddWithValue("@expresion", expresion);
                 }
-                da.SelectCommand = cmd;//no se ejecute antes
-                dgBusqueda.DataSource = dt;
+                else
+                {
+                    cmd.CommandText = " SELECT e.Clave_Emp,CONCAT(e.Nombre,' ',e.ApPaterno,' ',e.ApMaterno) as nombre_completo, e.Nombre,e.ApPaterno,e.ApMaterno, e.FecNac,d.Descripcion,e.sueldo,e.estatus FROM Empleados e INNER JOIN Departamentos d ON e.Departamento = d.Puesto WHERE  e.estatus=1";
+                }
                 dt.Clear();
+                da.SelectCommand = cmd;//no se ejecute antes
+                //DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
+                //dgBusqueda.Columns.Add(btn);
+                //btn.HeaderText = "Click Data";
+                //btn.Text = "edit";
+                //btn.Name = "btn";
+                //btn.UseColumnTextForButtonValue = true;
+                dgBusqueda.DataSource = dt;
                 da.Fill(dt);
             }
             catch (SqlException err)
@@ -105,12 +122,35 @@ namespace Empleados.Forms
         private void btnAceptar_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.OK;
+            string clave =dgBusqueda.Rows[dgBusqueda.CurrentRow.Index].Cells[0].Value.ToString();
+            string nombre = dgBusqueda.Rows[dgBusqueda.CurrentRow.Index].Cells[2].Value.ToString();
+            string paterno = dgBusqueda.Rows[dgBusqueda.CurrentRow.Index].Cells[3].Value.ToString();
+            string materno = dgBusqueda.Rows[dgBusqueda.CurrentRow.Index].Cells[4].Value.ToString();
+            string fecha = dgBusqueda.Rows[dgBusqueda.CurrentRow.Index].Cells[5].Value.ToString();
+            string departamento = dgBusqueda.Rows[dgBusqueda.CurrentRow.Index].Cells[6].Value.ToString();
+            string sueldo = dgBusqueda.Rows[dgBusqueda.CurrentRow.Index].Cells[7].Value.ToString();
+            string estatus = dgBusqueda.Rows[dgBusqueda.CurrentRow.Index].Cells[8].Value.ToString();
+
+
+            frmEmpleado frm = new frmEmpleado(clave,nombre,paterno,materno,fecha,departamento,sueldo,estatus);
+            frm.ShowDialog();
+
+
+           
+
+            
+
 
         }
 
         private void cboxsistema1_SelectedIndexChanged(object sender, EventArgs e)
         {
             buscar(cboxsistema1.Text);
+
+        }
+
+        private void dgBusqueda_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
 
         }
     }

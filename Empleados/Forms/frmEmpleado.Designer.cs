@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmEmpleado));
             this.txtapeMat = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -49,7 +50,11 @@
             this.toolEliminar = new System.Windows.Forms.ToolStripButton();
             this.dtpFecha = new System.Windows.Forms.DateTimePicker();
             this.label5 = new System.Windows.Forms.Label();
+            this.cboxEmpleado = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // txtapeMat
@@ -152,9 +157,9 @@
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 243);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 238);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(375, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(365, 22);
             this.statusStrip1.TabIndex = 67;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -167,7 +172,7 @@
             this.toolEliminar});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(375, 39);
+            this.toolStrip1.Size = new System.Drawing.Size(365, 39);
             this.toolStrip1.TabIndex = 68;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -234,11 +239,35 @@
             this.label5.TabIndex = 70;
             this.label5.Text = "Fecha de nacimiento:";
             // 
+            // cboxEmpleado
+            // 
+            this.cboxEmpleado.Enabled = false;
+            this.cboxEmpleado.FormattingEnabled = true;
+            this.cboxEmpleado.Location = new System.Drawing.Point(239, 45);
+            this.cboxEmpleado.Name = "cboxEmpleado";
+            this.cboxEmpleado.Size = new System.Drawing.Size(78, 21);
+            this.cboxEmpleado.TabIndex = 72;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(172, 49);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(61, 13);
+            this.label8.TabIndex = 71;
+            this.label8.Text = "tipo cliente:";
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
             // frmEmpleado
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(375, 265);
+            this.ClientSize = new System.Drawing.Size(365, 260);
+            this.Controls.Add(this.cboxEmpleado);
+            this.Controls.Add(this.label8);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.dtpFecha);
             this.Controls.Add(this.toolStrip1);
@@ -263,6 +292,7 @@
             this.Load += new System.EventHandler(this.frmClientes_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -289,5 +319,8 @@
         private System.Windows.Forms.ToolStripButton toolEliminar;
         private System.Windows.Forms.DateTimePicker dtpFecha;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox cboxEmpleado;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }

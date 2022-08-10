@@ -36,12 +36,14 @@
             this.btnAceptar = new System.Windows.Forms.Button();
             this.dgBusqueda = new System.Windows.Forms.DataGridView();
             this.Clave_Emp = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nombre_completo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ApPaterno = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ApMaterno = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FecNac = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Departamento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.sueldo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.estatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgBusqueda)).BeginInit();
             this.SuspendLayout();
@@ -54,7 +56,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(849, 58);
+            this.panel1.Size = new System.Drawing.Size(775, 58);
             this.panel1.TabIndex = 23;
             // 
             // cboxsistema1
@@ -86,7 +88,7 @@
             // 
             // btnCancelar
             // 
-            this.btnCancelar.Location = new System.Drawing.Point(732, 374);
+            this.btnCancelar.Location = new System.Drawing.Point(468, 370);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(75, 23);
             this.btnCancelar.TabIndex = 22;
@@ -95,7 +97,7 @@
             // 
             // btnAceptar
             // 
-            this.btnAceptar.Location = new System.Drawing.Point(651, 374);
+            this.btnAceptar.Location = new System.Drawing.Point(387, 370);
             this.btnAceptar.Name = "btnAceptar";
             this.btnAceptar.Size = new System.Drawing.Size(75, 23);
             this.btnAceptar.TabIndex = 21;
@@ -110,16 +112,19 @@
             this.dgBusqueda.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgBusqueda.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Clave_Emp,
+            this.nombre_completo,
             this.Nombre,
             this.ApPaterno,
             this.ApMaterno,
             this.FecNac,
             this.Departamento,
-            this.sueldo});
-            this.dgBusqueda.Location = new System.Drawing.Point(0, 130);
+            this.sueldo,
+            this.estatus});
+            this.dgBusqueda.Location = new System.Drawing.Point(0, 123);
             this.dgBusqueda.Name = "dgBusqueda";
-            this.dgBusqueda.Size = new System.Drawing.Size(845, 208);
+            this.dgBusqueda.Size = new System.Drawing.Size(710, 208);
             this.dgBusqueda.TabIndex = 20;
+            this.dgBusqueda.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgBusqueda_CellDoubleClick);
             // 
             // Clave_Emp
             // 
@@ -127,11 +132,19 @@
             this.Clave_Emp.HeaderText = "Clave";
             this.Clave_Emp.Name = "Clave_Emp";
             // 
+            // nombre_completo
+            // 
+            this.nombre_completo.DataPropertyName = "nombre_completo";
+            this.nombre_completo.HeaderText = "Nombre Completo";
+            this.nombre_completo.Name = "nombre_completo";
+            this.nombre_completo.Width = 200;
+            // 
             // Nombre
             // 
             this.Nombre.DataPropertyName = "Nombre";
             this.Nombre.HeaderText = "Nombre";
             this.Nombre.Name = "Nombre";
+            this.Nombre.Visible = false;
             this.Nombre.Width = 200;
             // 
             // ApPaterno
@@ -139,12 +152,14 @@
             this.ApPaterno.DataPropertyName = "ApPaterno";
             this.ApPaterno.HeaderText = "Apellido Paterno";
             this.ApPaterno.Name = "ApPaterno";
+            this.ApPaterno.Visible = false;
             // 
             // ApMaterno
             // 
             this.ApMaterno.DataPropertyName = "ApMaterno";
             this.ApMaterno.HeaderText = "Apellido Materno";
             this.ApMaterno.Name = "ApMaterno";
+            this.ApMaterno.Visible = false;
             // 
             // FecNac
             // 
@@ -164,11 +179,18 @@
             this.sueldo.HeaderText = "sueldo";
             this.sueldo.Name = "sueldo";
             // 
+            // estatus
+            // 
+            this.estatus.DataPropertyName = "estatus";
+            this.estatus.HeaderText = "Estatus";
+            this.estatus.Name = "estatus";
+            this.estatus.Visible = false;
+            // 
             // frmbusquedaEmpleado
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(849, 422);
+            this.ClientSize = new System.Drawing.Size(775, 395);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.btnAceptar);
@@ -194,11 +216,13 @@
         public System.Windows.Forms.DataGridView dgBusqueda;
         private System.Windows.Forms.ComboBox cboxsistema1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Clave_Emp;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nombre_completo;
         private System.Windows.Forms.DataGridViewTextBoxColumn Nombre;
         private System.Windows.Forms.DataGridViewTextBoxColumn ApPaterno;
         private System.Windows.Forms.DataGridViewTextBoxColumn ApMaterno;
         private System.Windows.Forms.DataGridViewTextBoxColumn FecNac;
         private System.Windows.Forms.DataGridViewTextBoxColumn Departamento;
         private System.Windows.Forms.DataGridViewTextBoxColumn sueldo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn estatus;
     }
 }

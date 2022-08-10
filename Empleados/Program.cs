@@ -13,7 +13,7 @@ namespace Empleados
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Forms.frmEmpleado());
+            Application.Run(new Forms.frmbusquedaEmpleado());
         }
     }
 }

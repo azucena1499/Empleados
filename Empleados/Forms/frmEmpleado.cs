@@ -8,19 +8,44 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Empleados.Clases;
 
 namespace Empleados.Forms
 {
     public partial class frmEmpleado : Form
     {
         Clases.Conexion objconexion;
+        private EmpleadoFuncion empleado;
         SqlConnection Conexion;
         private Clases.Conexion objConexionPrincipal;
         private SqlConnection cone;
         int existe = 0;
+        int estatus;
+
+        public frmEmpleado(string clave, string nombre, string paterno, string materno, string fecha, string departamento, string sueldo, string estatus)
+        {
+
+            InitializeComponent();
+            iniciarCboxDepa();
+            txtclave.Text = clave;
+            txtnombre.Text = nombre;
+            txtxape.Text = paterno;
+            txtapeMat.Text = materno;
+            dtpFecha.Text = fecha;
+            cboxDepartamento.Text=departamento;
+            txtSueldo.Text = sueldo;
+            txtclave.Enabled = false;
+            toolEliminar.Enabled = true;
+            existe = 1;
+            cboxEmpleado.Text = estatus;
+
+            empleado = new EmpleadoFuncion();
+
+        }
         public frmEmpleado()
         {
-            InitializeComponent();
+            maximo();
+            iniciarCboxDepa();
         }
 
         private void llenarcboxDepa()
@@ -55,47 +80,43 @@ namespace Empleados.Forms
             {
                 if (existe == 0)
                 {
-                    objconexion = new Clases.Conexion();
-                    Conexion = new SqlConnection(objconexion.Conn());
+                    
+                   
+                        bool resultado = empleado.guardar(txtclave.Text, txtnombre.Text, txtxape.Text, txtapeMat.Text, dtpFecha.Value, cboxDepartamento.SelectedValue.ToString(), txtSueldo.Text,cboxEmpleado.SelectedIndex.ToString() /*"1"*/ /*cboxEmpleado.SelectedValue.ToString()*/);
+                        if (resultado)
+                        {
+                            BorrarMensaje();
+                            MessageBox.Show("Empleado guardada con éxito", "Guardado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            limpiar();
 
-                    //se abre la conexion
-                    Conexion.Open();
-                    string query = "insert into Empleados values(@Clave_Emp,@Nombre,@ApPaterno,@apMaterno,@FecNac,@Departamento,@sueldo)";  //este es para insetar,se hace la conexion el campo y esl paramet                                                                                                            //asigno a comando el sqlcommand
-                    SqlCommand comando = new SqlCommand(query, Conexion);
-                    //inicializo cualquier parametrodefinido anteriormente
-                    comando.Parameters.Clear();
-                    comando.Parameters.AddWithValue("@Clave_Emp", txtclave.Text);
-                    comando.Parameters.AddWithValue("@Nombre", txtnombre.Text);
-                    comando.Parameters.AddWithValue("@ApPaterno", txtxape.Text);
-                    comando.Parameters.AddWithValue("@FecNac", dtpFecha.Value.Date);
-                    comando.Parameters.AddWithValue("@sueldo", txtSueldo.Text);
-                    comando.Parameters.AddWithValue("@Departamento", cboxDepartamento.SelectedValue);
-                    comando.Parameters.AddWithValue("@ApMaterno", txtapeMat.Text);
-                    comando.ExecuteNonQuery();
-                    Conexion.Close();
 
-                    MessageBox.Show("Empleado guardada con éxito", "Guardado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    
+                    else
+                    {
+                        Validar();
+
+                        MessageBox.Show("No se pudo guardar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    }
                     //txtClave.Clear();
                 }
                 if (existe == 1)
                 {
-                    objconexion = new Clases.Conexion();
-                    Conexion = new SqlConnection(objconexion.Conn());
-                    //se abre la conexion
-                    Conexion.Open();
-                    string query = "update Empleados set Nombre=@Nombre,ApPaterno=@ApPaterno,ApMaterno=@ApMaterno,FecNac=@FecNac,Departamento=@Departamento,sueldo=@sueldo where Clave_Emp=@Clave_Emp";  //este es para modificar,se hace la conexion el campo y esl paramet                                                                                                            //asigno a comando el sqlcommand
-                    SqlCommand comando = new SqlCommand(query, Conexion);
-                    comando.Parameters.Clear();
-                    comando.Parameters.AddWithValue("@Clave_Emp", int.Parse(txtclave.Text));
-                    comando.Parameters.AddWithValue("@Nombre", txtnombre.Text);
-                    comando.Parameters.AddWithValue("@ApPaterno", txtxape.Text);
-                    comando.Parameters.AddWithValue("@FecNac", dtpFecha.Value.Date);
-                    comando.Parameters.AddWithValue("@sueldo", txtSueldo.Text);
-                    comando.Parameters.AddWithValue("@Departamento", cboxDepartamento.SelectedIndex);
-                    comando.Parameters.AddWithValue("@ApMaterno", txtapeMat.Text);
-                    comando.ExecuteNonQuery();
-                    MessageBox.Show("consulta modificada con éxito", "Modificado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    limpiar();
+                    bool resultado = empleado.modificar(txtclave.Text, txtnombre.Text, txtxape.Text, txtapeMat.Text, dtpFecha.Value, cboxDepartamento.SelectedValue.ToString(), txtSueldo.Text, cboxEmpleado.SelectedIndex.ToString()/*"1"*/);
+                    if (resultado)
+                    {
+                        BorrarMensaje();
+                        MessageBox.Show("consulta modificada con éxito", "Modificado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        mostrarDatos();
+
+                    }
+                    else
+                    {
+                        Validar();
+                        MessageBox.Show("No se pudo modificar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    }
                 }
             }
             catch (SqlException err)
@@ -136,6 +157,7 @@ namespace Empleados.Forms
                     comando.Parameters.AddWithValue("@Departamento", this.cboxDepartamento.Text);
                     comando.Parameters.AddWithValue("@FecNac", this.dtpFecha.Text);
                     comando.Parameters.AddWithValue("@ApMaterno", this.txtapeMat.Text);
+                    comando.Parameters.AddWithValue("@estatus", this.cboxEmpleado.SelectedIndex);
 
 
                     SqlDataReader leer = comando.ExecuteReader();
@@ -148,6 +170,8 @@ namespace Empleados.Forms
                         txtSueldo.Enabled = true;
                         txtapeMat.Enabled = true;
                         cboxDepartamento.Enabled = true;
+                        cboxEmpleado.Enabled = true;
+                        cboxEmpleado.Enabled = true;
                         txtnombre.Focus();
                         txtclave.Enabled = false;
                         toolGuardar.Enabled = true;
@@ -160,11 +184,39 @@ namespace Empleados.Forms
                         txtclave.Text = leer["Clave_Emp"].ToString();
                         dtpFecha.Text = leer["FecNac"].ToString();
                         cboxDepartamento.Text = leer["Departamento"].ToString();
-                        txtapeMat.Text = leer["Cl_apemat"].ToString();
+                        txtapeMat.Text = leer["ApPaterno"].ToString();
+                        estatus = int.Parse(leer["estatus"].ToString());
+
+                        if (estatus == 1)
+                        {
+                            cboxEmpleado.SelectedIndex = estatus - 1;
+                        }
+                        else
+                        {
+                            cboxEmpleado.SelectedIndex = estatus + 1;
+                        }
+                        //if (estatus == 0)
+                        //{
+                        //    MessageBox.Show("Empleado dado de baja", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        //    toolEliminar.Enabled = false;
+                        //    toolGuardar.Enabled = false;
+                        //    cboxEmpleado.Enabled = false;
+                        //    txtnombre.Enabled = false;
+                        //    txtclave.Enabled = false;
+                        //    txtSueldo.Enabled = false;
+                        //    cboxDepartamento.Enabled = false;
+                        //    txtapeMat.Enabled = false;
+                        //    txtxape.Enabled = false;
+                        //    txtclave.Enabled = true;
+
+                        //    //limpiar();
 
 
+                        //}
                     }
+
                 }
+                
             else
             {
                 //si lavariable existe vale 0 y se usara insert
@@ -179,10 +231,30 @@ namespace Empleados.Forms
 
         private void frmClientes_Load(object sender, EventArgs e)
         {
+            
 
-            llenarcboxDepa();
-            //maximo();
         }
+        private void iniciarCboxDepa()
+        {
+            cboxEmpleado.Text = "seleccione";
+            cboxEmpleado.Items.Add("Activo");
+            cboxEmpleado.Items.Add("Baja");
+            llenarcboxDepa();
+        }
+        public void mostrarDatos()
+        {
+            objconexion = new Clases.Conexion();
+            Conexion = new SqlConnection(objconexion.Conn());
+            //se abre el contenido
+            Conexion.Open();
+            string query = "SELECT * from Empleados where estatus=1";
+            SqlCommand comando = new SqlCommand(query, Conexion);
+            //defino mi adapter
+            SqlDataAdapter da = new SqlDataAdapter(comando);
+            Conexion.Close();
+        }
+
+       
 
         private void maximo()
         {
@@ -204,32 +276,34 @@ namespace Empleados.Forms
 
         private void toolBuscar_Click(object sender, EventArgs e)
         {
-            frmbusquedaEmpleado frm = new frmbusquedaEmpleado();
+            //frmbusquedaEmpleado frm = new frmbusquedaEmpleado();
 
-            frm.ShowDialog();
+            //frm.ShowDialog();
 
-            if (frm.DialogResult == DialogResult.OK)
-            {
-                txtclave.Focus();
-                txtclave.Text = frm.dgBusqueda.Rows[frm.dgBusqueda.CurrentRow.Index].Cells[0].Value.ToString();
-                txtnombre.Text = frm.dgBusqueda.Rows[frm.dgBusqueda.CurrentRow.Index].Cells[1].Value.ToString();
-                txtxape.Text = frm.dgBusqueda.Rows[frm.dgBusqueda.CurrentRow.Index].Cells[2].Value.ToString();
-                txtapeMat.Text = frm.dgBusqueda.Rows[frm.dgBusqueda.CurrentRow.Index].Cells[3].Value.ToString();
 
-                dtpFecha.Text = frm.dgBusqueda.Rows[frm.dgBusqueda.CurrentRow.Index].Cells[4].Value.ToString();
+            //if (frm.DialogResult == DialogResult.OK)
+            //{
+            //    txtclave.Focus();
+            //    txtclave.Text = frm.dgBusqueda.Rows[frm.dgBusqueda.CurrentRow.Index].Cells[0].Value.ToString();
+            //    txtnombre.Text = frm.dgBusqueda.Rows[frm.dgBusqueda.CurrentRow.Index].Cells[2].Value.ToString();
+            //    txtxape.Text = frm.dgBusqueda.Rows[frm.dgBusqueda.CurrentRow.Index].Cells[3].Value.ToString();
+            //    txtapeMat.Text = frm.dgBusqueda.Rows[frm.dgBusqueda.CurrentRow.Index].Cells[4].Value.ToString();
 
-                cboxDepartamento.Text = frm.dgBusqueda.Rows[frm.dgBusqueda.CurrentRow.Index].Cells[5].Value.ToString();
-                txtSueldo.Text = frm.dgBusqueda.Rows[frm.dgBusqueda.CurrentRow.Index].Cells[6].Value.ToString();
+            //    dtpFecha.Text = frm.dgBusqueda.Rows[frm.dgBusqueda.CurrentRow.Index].Cells[5].Value.ToString();
+            //    //cboxEmpleado.Text = frm.dgBusqueda.Rows[frm.dgBusqueda.CurrentRow.Index].Cells[9].Value.ToString();
 
-                existe = 1;
-                txtclave.Enabled = false;
-                toolEliminar.Enabled = true;
-            }
-            else
-            {
-                existe = 0;
+            //    cboxDepartamento.Text = frm.dgBusqueda.Rows[frm.dgBusqueda.CurrentRow.Index].Cells[6].Value.ToString();
+            //    txtSueldo.Text = frm.dgBusqueda.Rows[frm.dgBusqueda.CurrentRow.Index].Cells[7].Value.ToString();
 
-            }
+            //    existe = 1;
+            //    txtclave.Enabled = false;
+            //    toolEliminar.Enabled = true;
+            //}
+            //else
+            //{
+            //    existe = 0;
+
+            
         }
         private void limpiar()
         {
@@ -240,8 +314,10 @@ namespace Empleados.Forms
             txtclave.Focus();
             txtxape.Clear();
             txtapeMat.Clear();
+            cboxEmpleado.Enabled = false;
             cboxDepartamento.SelectedIndex = 0;
             toolEliminar.Enabled = false;
+
         }
         private void toolEliminar_Click(object sender, EventArgs e)
         {
@@ -252,17 +328,19 @@ namespace Empleados.Forms
                 Conexion = new SqlConnection(objconexion.Conn());
                 //se abre el contenido
                 Conexion.Open();
-                string query = "DELETE from Empleados where Clave_Emp=" + txtclave.Text;
+                string query = "update Empleados set estatus=0 where Clave_Emp=@Clave_Emp";
+                
                 SqlCommand comando = new SqlCommand(query, Conexion);
                 comando.Parameters.Clear();
+                comando.Parameters.AddWithValue("@Clave_Emp", txtclave.Text);
                 if (MessageBox.Show("Empleado sera eliminada,está seguro?", "Eliminar", MessageBoxButtons.YesNo,
                     MessageBoxIcon.Stop) == DialogResult.Yes)
                 {
                     comando.ExecuteNonQuery();
-                    MessageBox.Show("Empleado Eliminada", "Eliminar", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Empleado Eliminado", "Eliminar", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     limpiar();
                 }
-
+                Conexion.Close();
             }
             catch (SqlException err)
             {
@@ -279,6 +357,54 @@ namespace Empleados.Forms
         private void toolNuevo_Click(object sender, EventArgs e)
         {
             limpiar();
+        }
+
+        public bool Validar()
+        {
+            bool ok = true;
+            if(txtnombre.Text == "")
+            {
+                ok = false;
+                errorProvider1.SetError(txtnombre, "Ingrese nombre");
+            }
+            if (txtapeMat.Text == "")
+            {
+                ok = false;
+                errorProvider1.SetError(txtapeMat, "Ingrese apellido materno");
+            }
+            if (txtxape.Text == "")
+            {
+                ok = false;
+                errorProvider1.SetError(txtxape, "Ingrese apellido paterno");
+            }
+            if (txtSueldo.Text == "")
+            {
+                ok = false;
+                errorProvider1.SetError(txtSueldo, "Ingrese sueldo");
+            }
+            if (cboxDepartamento.SelectedValue.ToString() == "")
+            {
+                ok = false;
+                errorProvider1.SetError(cboxDepartamento, "Ingrese departamento");
+            }
+            if (dtpFecha.Value.ToString() == "")
+            {
+                ok = false;
+                errorProvider1.SetError(dtpFecha, "Ingrese departamento");
+            }
+            return ok = true;
+            
+
+        }
+        private void BorrarMensaje()
+        {
+            errorProvider1.SetError(txtnombre, "");
+            errorProvider1.SetError(cboxDepartamento, "");
+            errorProvider1.SetError(txtSueldo, "");
+            errorProvider1.SetError(dtpFecha, "");
+            errorProvider1.SetError(txtxape, "");
+            errorProvider1.SetError(txtapeMat, "");
+
         }
     }
     
