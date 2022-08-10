@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>astronomy_saturn_galaxy_planet_space_system_universe_icon_156874.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -86,7 +89,6 @@
       <DependentUpon>EmpleadosDataSet.xsd</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Forms\frmbusquedaEmpleado.resx">
       <DependentUpon>frmbusquedaEmpleado.cs</DependentUpon>
@@ -98,6 +100,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\astronomy_saturn_galaxy_planet_space_system_universe_icon_156874.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="astronomy_saturn_galaxy_planet_space_system_universe_icon_156874.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

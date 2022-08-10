@@ -109,11 +109,11 @@
             // 
             // txtclave
             // 
+            this.txtclave.Enabled = false;
             this.txtclave.Location = new System.Drawing.Point(113, 46);
             this.txtclave.Name = "txtclave";
             this.txtclave.Size = new System.Drawing.Size(46, 20);
             this.txtclave.TabIndex = 52;
-            this.txtclave.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtclave_KeyPress);
             // 
             // txtnombre
             // 
@@ -157,9 +157,9 @@
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 238);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 273);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(365, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(416, 22);
             this.statusStrip1.TabIndex = 67;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -172,7 +172,7 @@
             this.toolEliminar});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(365, 39);
+            this.toolStrip1.Size = new System.Drawing.Size(416, 39);
             this.toolStrip1.TabIndex = 68;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -185,7 +185,7 @@
             this.toolNuevo.Name = "toolNuevo";
             this.toolNuevo.Size = new System.Drawing.Size(36, 36);
             this.toolNuevo.Text = "Nuevo";
-            this.toolNuevo.Click += new System.EventHandler(this.toolNuevo_Click);
+            this.toolNuevo.Visible = false;
             // 
             // toolGuardar
             // 
@@ -209,6 +209,7 @@
             this.toolBuscar.Size = new System.Drawing.Size(36, 36);
             this.toolBuscar.Text = "toolStripButton2";
             this.toolBuscar.ToolTipText = "Buscar";
+            this.toolBuscar.Visible = false;
             this.toolBuscar.Click += new System.EventHandler(this.toolBuscar_Click);
             // 
             // toolEliminar
@@ -247,6 +248,7 @@
             this.cboxEmpleado.Name = "cboxEmpleado";
             this.cboxEmpleado.Size = new System.Drawing.Size(78, 21);
             this.cboxEmpleado.TabIndex = 72;
+            this.cboxEmpleado.Visible = false;
             // 
             // label8
             // 
@@ -256,6 +258,7 @@
             this.label8.Size = new System.Drawing.Size(61, 13);
             this.label8.TabIndex = 71;
             this.label8.Text = "tipo cliente:";
+            this.label8.Visible = false;
             // 
             // errorProvider1
             // 
@@ -265,7 +268,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(365, 260);
+            this.ClientSize = new System.Drawing.Size(416, 295);
             this.Controls.Add(this.cboxEmpleado);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label5);
@@ -284,6 +287,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtclave);
             this.Controls.Add(this.txtnombre);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmEmpleado";

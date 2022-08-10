@@ -44,9 +44,14 @@ namespace Empleados.Forms
         }
         public frmEmpleado()
         {
+            InitializeComponent();
+            empleado = new EmpleadoFuncion();
             maximo();
             iniciarCboxDepa();
         }
+
+ 
+
 
         private void llenarcboxDepa()
         {
@@ -78,44 +83,44 @@ namespace Empleados.Forms
         {
             try
             {
-                if (existe == 0)
+                if (Validar())
                 {
-                    
-                   
-                        bool resultado = empleado.guardar(txtclave.Text, txtnombre.Text, txtxape.Text, txtapeMat.Text, dtpFecha.Value, cboxDepartamento.SelectedValue.ToString(), txtSueldo.Text,cboxEmpleado.SelectedIndex.ToString() /*"1"*/ /*cboxEmpleado.SelectedValue.ToString()*/);
+
+                    if (existe == 0)
+                    {
+
+
+                        bool resultado = empleado.guardar(txtclave.Text, txtnombre.Text, txtxape.Text, txtapeMat.Text, dtpFecha.Value, cboxDepartamento.SelectedValue.ToString(), txtSueldo.Text, "1" /*cboxEmpleado.SelectedValue.ToString()*/);
                         if (resultado)
                         {
                             BorrarMensaje();
                             MessageBox.Show("Empleado guardada con éxito", "Guardado", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             limpiar();
+                        }
 
+                        else
+                        {
+
+                            MessageBox.Show("No se pudo guardar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                         }
-                    
-                    else
-                    {
-                        Validar();
-
-                        MessageBox.Show("No se pudo guardar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                     }
-                    //txtClave.Clear();
-                }
-                if (existe == 1)
-                {
-                    bool resultado = empleado.modificar(txtclave.Text, txtnombre.Text, txtxape.Text, txtapeMat.Text, dtpFecha.Value, cboxDepartamento.SelectedValue.ToString(), txtSueldo.Text, cboxEmpleado.SelectedIndex.ToString()/*"1"*/);
-                    if (resultado)
+                    if (existe == 1)
                     {
-                        BorrarMensaje();
-                        MessageBox.Show("consulta modificada con éxito", "Modificado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        mostrarDatos();
+                        bool resultado = empleado.modificar(txtclave.Text, txtnombre.Text, txtxape.Text, txtapeMat.Text, dtpFecha.Value, cboxDepartamento.SelectedValue.ToString(), txtSueldo.Text, cboxEmpleado.SelectedIndex.ToString()/*"1"*/);
+                        if (resultado)
+                        {
+                            BorrarMensaje();
+                            MessageBox.Show("consulta modificada con éxito", "Modificado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            mostrarDatos();
 
-                    }
-                    else
-                    {
-                        Validar();
-                        MessageBox.Show("No se pudo modificar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+                            Validar();
+                            MessageBox.Show("No se pudo modificar", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
+                        }
                     }
                 }
             }
@@ -125,109 +130,93 @@ namespace Empleados.Forms
             }
         }
 
-        private void txtclave_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == 13)
-                //chechando que no sea valor nulo o blanco
-                if (string.IsNullOrEmpty(txtclave.Text))
-                {
-                    MessageBox.Show("Error:No se permiten nulos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    txtclave.Enabled = true;
-                    txtclave.Clear();
-                    txtclave.Focus();
-                }
-                else
-                {
-                    //no fue nulo
+        //private void txtclave_KeyPress(object sender, KeyPressEventArgs e)
+        //{
+        //    if (e.KeyChar == 13)
+        //        //chechando que no sea valor nulo o blanco
+        //        if (string.IsNullOrEmpty(txtclave.Text))
+        //        {
+        //            MessageBox.Show("Error:No se permiten nulos", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //            txtclave.Enabled = true;
+        //            txtclave.Clear();
+        //            txtclave.Focus();
+        //        }
+        //        else
+        //        {
+        //            //no fue nulo
 
-                    objconexion = new Clases.Conexion();
-                    Conexion = new SqlConnection(objconexion.Conn());
-                    //se abre la conexion
-                    Conexion.Open();
-                    string query = "select * from Empleados where Clave_Emp=@Clave_Emp";
-                    //asigno a comando el sqlcommand
-                    SqlCommand comando = new SqlCommand(query, Conexion);
-                    //inicializo cualquier parametrodefinido anteriormente
-                    comando.Parameters.Clear();
+        //            objconexion = new Clases.Conexion();
+        //            Conexion = new SqlConnection(objconexion.Conn());
+        //            //se abre la conexion
+        //            Conexion.Open();
+        //            string query = "select * from Empleados where Clave_Emp=@Clave_Emp";
+        //            //asigno a comando el sqlcommand
+        //            SqlCommand comando = new SqlCommand(query, Conexion);
+        //            //inicializo cualquier parametrodefinido anteriormente
+        //            comando.Parameters.Clear();
 
-                    comando.Parameters.AddWithValue("@Clave_Emp", this.txtclave.Text);
-                    comando.Parameters.AddWithValue("@Nombre", this.txtnombre.Text);
-                    comando.Parameters.AddWithValue("@ApPaterno", this.txtxape.Text);
-                    comando.Parameters.AddWithValue("@Sueldo", this.txtSueldo.Text);
-                    comando.Parameters.AddWithValue("@Departamento", this.cboxDepartamento.Text);
-                    comando.Parameters.AddWithValue("@FecNac", this.dtpFecha.Text);
-                    comando.Parameters.AddWithValue("@ApMaterno", this.txtapeMat.Text);
-                    comando.Parameters.AddWithValue("@estatus", this.cboxEmpleado.SelectedIndex);
-
-
-                    SqlDataReader leer = comando.ExecuteReader();
-                    if (leer.Read())
-                    {
-                        //inicializo la variable 1 para que el programa sepa que existe
-                        existe = 1;
-                        txtnombre.Enabled = true;
-                        txtxape.Enabled = true;
-                        txtSueldo.Enabled = true;
-                        txtapeMat.Enabled = true;
-                        cboxDepartamento.Enabled = true;
-                        cboxEmpleado.Enabled = true;
-                        cboxEmpleado.Enabled = true;
-                        txtnombre.Focus();
-                        txtclave.Enabled = false;
-                        toolGuardar.Enabled = true;
-                        toolEliminar.Enabled = true;
-
-                        //igualo los campos o columnas al txtnombre
-                        txtnombre.Text = leer["Nombre"].ToString();
-                        txtxape.Text = leer["ApMaterno"].ToString();
-                        txtSueldo.Text = leer["Sueldo"].ToString();
-                        txtclave.Text = leer["Clave_Emp"].ToString();
-                        dtpFecha.Text = leer["FecNac"].ToString();
-                        cboxDepartamento.Text = leer["Departamento"].ToString();
-                        txtapeMat.Text = leer["ApPaterno"].ToString();
-                        estatus = int.Parse(leer["estatus"].ToString());
-
-                        if (estatus == 1)
-                        {
-                            cboxEmpleado.SelectedIndex = estatus - 1;
-                        }
-                        else
-                        {
-                            cboxEmpleado.SelectedIndex = estatus + 1;
-                        }
-                        //if (estatus == 0)
-                        //{
-                        //    MessageBox.Show("Empleado dado de baja", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        //    toolEliminar.Enabled = false;
-                        //    toolGuardar.Enabled = false;
-                        //    cboxEmpleado.Enabled = false;
-                        //    txtnombre.Enabled = false;
-                        //    txtclave.Enabled = false;
-                        //    txtSueldo.Enabled = false;
-                        //    cboxDepartamento.Enabled = false;
-                        //    txtapeMat.Enabled = false;
-                        //    txtxape.Enabled = false;
-                        //    txtclave.Enabled = true;
-
-                        //    //limpiar();
+        //            comando.Parameters.AddWithValue("@Clave_Emp", this.txtclave.Text);
+        //            comando.Parameters.AddWithValue("@Nombre", this.txtnombre.Text);
+        //            comando.Parameters.AddWithValue("@ApPaterno", this.txtxape.Text);
+        //            comando.Parameters.AddWithValue("@Sueldo", this.txtSueldo.Text);
+        //            comando.Parameters.AddWithValue("@Departamento", this.cboxDepartamento.Text);
+        //            comando.Parameters.AddWithValue("@FecNac", this.dtpFecha.Text);
+        //            comando.Parameters.AddWithValue("@ApMaterno", this.txtapeMat.Text);
+        //            comando.Parameters.AddWithValue("@estatus", this.cboxEmpleado.SelectedIndex);
 
 
-                        //}
-                    }
+        //            SqlDataReader leer = comando.ExecuteReader();
+        //            if (leer.Read())
+        //            {
+        //                //inicializo la variable 1 para que el programa sepa que existe
+        //                existe = 1;
+        //                txtnombre.Enabled = true;
+        //                txtxape.Enabled = true;
+        //                txtSueldo.Enabled = true;
+        //                txtapeMat.Enabled = true;
+        //                cboxDepartamento.Enabled = true;
+        //                cboxEmpleado.Enabled = true;
+        //                cboxEmpleado.Enabled = true;
+        //                txtnombre.Focus();
+        //                txtclave.Enabled = false;
+        //                toolGuardar.Enabled = true;
+        //                toolEliminar.Enabled = true;
 
-                }
+        //                //igualo los campos o columnas al txtnombre
+        //                txtnombre.Text = leer["Nombre"].ToString();
+        //                txtxape.Text = leer["ApMaterno"].ToString();
+        //                txtSueldo.Text = leer["Sueldo"].ToString();
+        //                txtclave.Text = leer["Clave_Emp"].ToString();
+        //                dtpFecha.Text = leer["FecNac"].ToString();
+        //                cboxDepartamento.Text = leer["Departamento"].ToString();
+        //                txtapeMat.Text = leer["ApPaterno"].ToString();
+        //                estatus = int.Parse(leer["estatus"].ToString());
+
+        //                if (estatus == 1)
+        //                {
+        //                    cboxEmpleado.SelectedIndex = estatus - 1;
+        //                }
+        //                else
+        //                {
+        //                    cboxEmpleado.SelectedIndex = estatus + 1;
+        //                }
+                       
+        //            }
+        //            Conexion.Close();
+
+        //        }
                 
-            else
-            {
-                //si lavariable existe vale 0 y se usara insert
-                existe = 0;
-                if (MessageBox.Show("Empleado no registrado.¿desea agregar un nuevo Empleado?", "No existe", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                {
-                    txtnombre.Enabled = true;
-                    txtnombre.Focus();
-                }
-            }
-        }
+        //    else
+        //    {
+        //        //si lavariable existe vale 0 y se usara insert
+        //        existe = 0;
+        //        if (MessageBox.Show("Empleado no registrado.¿desea agregar un nuevo Empleado?", "No existe", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+        //        {
+        //            txtnombre.Enabled = true;
+        //            txtnombre.Focus();
+        //        }
+        //    }
+        //}
 
         private void frmClientes_Load(object sender, EventArgs e)
         {
@@ -309,14 +298,13 @@ namespace Empleados.Forms
         {
             txtSueldo.Clear();
             txtnombre.Clear();
-            txtclave.Enabled = true;
             txtclave.Clear();
-            txtclave.Focus();
             txtxape.Clear();
             txtapeMat.Clear();
             cboxEmpleado.Enabled = false;
             cboxDepartamento.SelectedIndex = 0;
             toolEliminar.Enabled = false;
+            maximo();
 
         }
         private void toolEliminar_Click(object sender, EventArgs e)
@@ -348,16 +336,19 @@ namespace Empleados.Forms
             }
         }
 
-        private void btnGuardar_Click(object sender, EventArgs e)
-        {
+        //private void btnGuardar_Click(object sender, EventArgs e)
+        //{
             
            
-        }
+        //}
 
-        private void toolNuevo_Click(object sender, EventArgs e)
-        {
-            limpiar();
-        }
+        //private void toolNuevo_Click(object sender, EventArgs e)
+        //{
+        //    limpiar();
+        //    txtclave.Enabled = false;
+        //    txtnombre.Focus();
+        //    cboxEmpleado.Enabled = true;
+        //}
 
         public bool Validar()
         {
@@ -392,7 +383,7 @@ namespace Empleados.Forms
                 ok = false;
                 errorProvider1.SetError(dtpFecha, "Ingrese departamento");
             }
-            return ok = true;
+            return ok;
             
 
         }
@@ -405,6 +396,11 @@ namespace Empleados.Forms
             errorProvider1.SetError(txtxape, "");
             errorProvider1.SetError(txtapeMat, "");
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            
         }
     }
     

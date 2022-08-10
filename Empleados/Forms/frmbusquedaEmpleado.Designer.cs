@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmbusquedaEmpleado));
             this.panel1 = new System.Windows.Forms.Panel();
             this.cboxsistema1 = new System.Windows.Forms.ComboBox();
             this.txtExpresion = new System.Windows.Forms.TextBox();
@@ -44,6 +45,7 @@
             this.Departamento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.sueldo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.estatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnNuevo = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgBusqueda)).BeginInit();
             this.SuspendLayout();
@@ -63,7 +65,7 @@
             // 
             this.cboxsistema1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboxsistema1.FormattingEnabled = true;
-            this.cboxsistema1.Location = new System.Drawing.Point(163, 13);
+            this.cboxsistema1.Location = new System.Drawing.Point(3, 3);
             this.cboxsistema1.Name = "cboxsistema1";
             this.cboxsistema1.Size = new System.Drawing.Size(211, 21);
             this.cboxsistema1.TabIndex = 30;
@@ -71,16 +73,16 @@
             // 
             // txtExpresion
             // 
-            this.txtExpresion.Location = new System.Drawing.Point(12, 13);
+            this.txtExpresion.Location = new System.Drawing.Point(398, 14);
             this.txtExpresion.Name = "txtExpresion";
             this.txtExpresion.Size = new System.Drawing.Size(145, 20);
             this.txtExpresion.TabIndex = 1;
-            this.txtExpresion.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtExpresion_KeyPress);
+            this.txtExpresion.Visible = false;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 39);
+            this.label1.Location = new System.Drawing.Point(23, 27);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(98, 13);
             this.label1.TabIndex = 0;
@@ -122,7 +124,7 @@
             this.estatus});
             this.dgBusqueda.Location = new System.Drawing.Point(0, 123);
             this.dgBusqueda.Name = "dgBusqueda";
-            this.dgBusqueda.Size = new System.Drawing.Size(710, 208);
+            this.dgBusqueda.Size = new System.Drawing.Size(645, 208);
             this.dgBusqueda.TabIndex = 20;
             this.dgBusqueda.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgBusqueda_CellDoubleClick);
             // 
@@ -186,15 +188,27 @@
             this.estatus.Name = "estatus";
             this.estatus.Visible = false;
             // 
+            // btnNuevo
+            // 
+            this.btnNuevo.Location = new System.Drawing.Point(635, 94);
+            this.btnNuevo.Name = "btnNuevo";
+            this.btnNuevo.Size = new System.Drawing.Size(75, 23);
+            this.btnNuevo.TabIndex = 74;
+            this.btnNuevo.Text = "Nuevo";
+            this.btnNuevo.UseVisualStyleBackColor = true;
+            this.btnNuevo.Click += new System.EventHandler(this.button1_Click);
+            // 
             // frmbusquedaEmpleado
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(775, 395);
+            this.Controls.Add(this.btnNuevo);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.btnAceptar);
             this.Controls.Add(this.dgBusqueda);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmbusquedaEmpleado";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "frmbusquedaEmpleado";
@@ -224,5 +238,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Departamento;
         private System.Windows.Forms.DataGridViewTextBoxColumn sueldo;
         private System.Windows.Forms.DataGridViewTextBoxColumn estatus;
+        private System.Windows.Forms.Button btnNuevo;
     }
 }

@@ -70,7 +70,8 @@ namespace Empleados.Clases
                 comando.Parameters.AddWithValue("@sueldo", sueldo);
                 comando.Parameters.AddWithValue("@Departamento", int.Parse(departamento));
                 comando.Parameters.AddWithValue("@ApMaterno", materno);
-                comando.Parameters.AddWithValue("@estatus", int.Parse(estatus));
+                comando.Parameters.AddWithValue("@estatus", 1);
+
 
                 comando.ExecuteNonQuery();
                 Conexion.Close();
@@ -82,7 +83,7 @@ namespace Empleados.Clases
                 return false;
 
             }
-      
+
 
         }
 
